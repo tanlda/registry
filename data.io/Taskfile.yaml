@@ -1,0 +1,32 @@
+version: "3"
+
+tasks:
+  build:
+    cmds:
+      - docker build -t {{ .REPO }}/{{ .NAME }}:{{ .TAG }} {{ .NAME }}
+      - docker push {{ .REPO }}/{{ .NAME }}:{{ .TAG }}
+    vars:
+      REPO: '{{ .REPO | default "data.io" }}'
+      NAME: '{{ .NAME | default "" }}'
+      TAG: '{{ .TAG | default "latest" }}'
+
+  tls:
+    cmds:
+      - mkdir -p certs auth
+      - docker run --rm xmartlabs/htpasswd admin password > auth/htpasswd
+      - >
+        openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key -x509 -days 365 -out certs/domain.crt
+        -subj "/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=data.io"
+        -addext "subjectAltName = DNS:data.io"
+
+  config:
+    cmds:
+      - for: [ "pipeline", "mlops" ]
+        cmd: >
+          kubectl create secret generic docker-config
+          --from-file=.dockerconfigjson=.docker/config.json
+          --type=kubernetes.io/dockerconfigjson
+          --namespace {{ .ITEM }}
+          --dry-run=client
+          -o yaml |
+          kubectl apply -f -

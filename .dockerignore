@@ -1,0 +1,65 @@
+# Ignore version control directories
+.git/
+.svn/
+.hg/
+
+# Ignore build and test artifacts
+node_modules/
+dist/
+tmp/
+build/
+target/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore Python virtual environments
+venv/
+env/
+.virtualenv/
+
+# Ignore logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Ignore development and testing files
+*.env
+*.env.local
+.env/
+.env.local/
+config/dev/
+config/test/
+Dockerfile*
+docker-compose*.yml
+
+# Ignore sensitive files
+*.pem
+*.key
+*.cert
+
+# Ignore specific operating system generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore large, unnecessary files
+*.tar.gz
+*.zip
+*.rar
+*.mp4
+*.jpg
+*.jpeg
+*.png
+
+# Ignore Jupyter Notebook files
+*.ipynb
+.ipynb_checkpoints/
+
+# Ignore profiling files
+*.prof
